@@ -63,9 +63,9 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           # Ensure you create this secret in GitHub Settings > Secrets > Actions
           # It should contain the JSON service account key for your DEV Firebase project.
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" # Example name, choose your own
-          channelId: live # Deploy to the live channel of the DEV project
-          projectId: "your-actual-dev-project-id" # Optional: Explicitly set DEV project ID, or let Service Account determine it.
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" # Ensure this secret is created in the 'development' environment settings
+          # channelId: dev # Optional: deploy to a specific preview channel
+          projectId: "static-website-template-ee8ac" # Set the confirmed DEV project ID.
 
       # Optional: Output deployment URL
       - name: Deployment URL
