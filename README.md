@@ -149,18 +149,29 @@ See the `.github/workflows/` directory for an example CI/CD setup using GitHub A
 ├── .husky/             # Husky Git hooks configuration (e.g., pre-commit script)
 ├── public/             # Static assets served directly
 ├── src/
-│   ├── assets/         # Images, fonts, etc.
-│   ├── components/     # Reusable UI components (e.g., layout, specific widgets)
-│   ├── contexts/       # React Context providers (e.g., AuthContext)
-│   ├── hooks/          # Custom React hooks (e.g., useAuth)
+│   ├── assets/         # Images, fonts, etc. (e.g., logo.svg)
+│   ├── components/     # Reusable UI components
+│   │   ├── layout/       # MainLayout component
+│   │   ├── UserProfileDialog/ # Dialog for user profile actions (sign out, delete)
+│   │   ├── BreadCrumbs.tsx # Dynamic breadcrumbs component
+│   │   └── UserDetails.tsx # Component to display basic user details
+│   ├── contexts/       # React Context providers (AuthContext.tsx)
+│   ├── hooks/          # Custom React hooks (useAuth)
+│   ├── models/         # Data models/types (user.ts -> UserData)
 │   ├── pages/          # Page-level components (routed components)
-│   │   ├── auth/       # Auth-related pages (e.g., LoginPage)
-│   │   ├── error/      # Error page component
-│   │   ├── DashboardPage.tsx
-│   │   └── HomePage.tsx
+│   │   ├── auth/       # Auth pages (LoginPage.tsx)
+│   │   ├── error/      # Error page component (ErrorPage.tsx)
+│   │   ├── UserProfile/ # User Profile view & edit pages
+│   │   │   ├── UserProfilePage.tsx
+│   │   │   ├── UserProfileEditPage.tsx
+│   │   │   └── UserProfileDetailsCard.tsx
+│   │   ├── DashboardPage.tsx # Example protected dashboard page
+│   │   └── HomePage.tsx      # Example protected home page
+│   ├── repositories/   # Data access layer (UserRepository.ts)
 │   ├── routes/         # Routing configuration (routes.tsx, PrivateRoute.tsx)
-│   ├── services/       # Service integrations (e.g., firebaseConfig.ts)
+│   ├── services/       # Service integrations (firebaseConfig.ts, authService.ts)
 │   ├── theme/          # MUI Theme configuration (if customized)
+│   ├── utils/          # Utility functions (e.g., firestorePaths.ts)
 │   ├── App.tsx         # Main application component (sets up router)
 │   └── main.tsx        # Application entry point (renders App, providers)
 ├── .env.example        # Example environment variables
