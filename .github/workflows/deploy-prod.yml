@@ -1,66 +1,66 @@
-name: Deploy Production
+name: Deploy Firebase Hosting (Prod)
+
 on:
   push:
-    branches: ["prod"]
+    branches:
+      - prod # Trigger prod deployment on push/merge to prod branch
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
 
-    env:
-      VITE_PUBLIC_APIKEY: ${{ vars.PROD_VITE_PUBLIC_APIKEY }}
-      VITE_PUBLIC_AUTHDOMAIN: ${{ vars.PROD_VITE_PUBLIC_AUTHDOMAIN }}
-      VITE_PUBLIC_PROJECTID: ${{ vars.PROD_VITE_PUBLIC_PROJECTID }}
-      VITE_PUBLIC_STORAGEBUCKET: ${{ vars.PROD_VITE_PUBLIC_STORAGEBUCKET }}
-      VITE_PUBLIC_MESSAGINGSENDERID: ${{ vars.PROD_VITE_PUBLIC_MESSAGINGSENDERID }}
-      VITE_PUBLIC_APPID: ${{ vars.PROD_VITE_PUBLIC_APPID }}
-      VITE_PUBLIC_MEASUREMENTID: ${{ vars.PROD_VITE_PUBLIC_MEASUREMENTID }}
-
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version-file: "package.json"
           cache: npm
           cache-dependency-path: "**/package-lock.json"
 
-      - name: Install
+      - name: Install Dependencies
         run: npm ci
-        working-directory: ./
 
-      - name: Build
+      - name: Build Project
         run: npm run build
-        working-directory: ./
 
-      - name: Archive Production Artifact
+      - name: Archive Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-prod
           path: dist
 
   deploy:
-    name: Deploy
+    name: Deploy (Production)
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      # url: <Your Prod Site URL> # Optional: Add prod site URL
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          name: dist-prod
           path: dist
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v13.28.0
+      - name: Deploy to Firebase Hosting (Production)
+        id: deploy_firebase_prod
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: deploy --only hosting
-        env:
-          GCP_SA_KEY: ${{ secrets.PROD_FIREBASE_SERVICE_ACCOUNT }}
-          PROJECT_ID: jsw-prod
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STATIC_WEBSITE_TEMPLATE_EE8AC }}"
+          channelId: live
+          projectId: "static-website-template-ee8ac"
+
+      - name: Deployment URL
+        if: steps.deploy_firebase_prod.outputs.details_url
+        run: echo "Deployed PROD to ${{ steps.deploy_firebase_prod.outputs.details_url }}"

@@ -1,6 +1,8 @@
 {
   "projects": {
-    "default": "your-firebase-project-id"
+    "default": "static-website-template-ee8ac",
+    "dev": "your-dev-project-id",
+    "prod": "static-website-template-ee8ac"
   },
   "etags": {}
 }

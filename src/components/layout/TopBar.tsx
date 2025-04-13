@@ -12,6 +12,7 @@ import {
   MenuItem,
   Avatar,
 } from "@mui/material";
+import { APP_TITLE } from "../../config";
 
 // Top Bar Component extracted from MainLayout
 const TopBar: React.FC = () => {
@@ -48,7 +49,7 @@ const TopBar: React.FC = () => {
           to="/"
           sx={{ flexGrow: 1, color: "inherit", textDecoration: "none" }}
         >
-          App Template
+          {APP_TITLE}
         </Typography>
         {loading ? (
           <CircularProgress color="inherit" size={24} />
