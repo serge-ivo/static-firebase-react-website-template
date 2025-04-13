@@ -14,6 +14,7 @@ import {
   User,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from "firebase/firestore";
 
@@ -26,6 +27,7 @@ export interface AuthContextType {
   signInWithEmailPassword: (email: string, password: string) => Promise<void>;
   signUpWithEmailPassword: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  sendPasswordReset: (email: string) => Promise<void>;
 }
 
 // Create the AuthContext
@@ -191,6 +193,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  // Add sendPasswordReset function
+  const sendPasswordReset = async (email: string) => {
+    // No loading state change here, as it's a quick operation
+    try {
+      await sendPasswordResetEmail(auth, email);
+      console.log("Password reset email sent successfully to:", email);
+    } catch (error) {
+      console.error("Error sending password reset email:", error);
+      throw error; // Re-throw error for handling in the component
+    }
+  };
+
   // Listen for auth state changes (restore ensureUserDocument call)
   useEffect(() => {
     setLoading(true); // Ensure loading is true when listener starts
@@ -220,7 +234,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return () => unsubscribe();
   }, []);
 
-  // Provide the context value (add back Google/GitHub methods)
+  // Provide the context value (add sendPasswordReset)
   const value: AuthContextType = {
     currentUser,
     loading,
@@ -229,6 +243,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     signInWithEmailPassword,
     signUpWithEmailPassword,
     logout,
+    sendPasswordReset,
   };
 
   // Remove loading indicator return, let consumers handle it if needed

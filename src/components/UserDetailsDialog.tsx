@@ -1,14 +1,13 @@
-import React, { useState } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  CircularProgress,
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
 } from "@mui/material";
+import React, { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import UserDetails from "./UserDetails";
 // import UserOrganizations from "./UserOrganizations";
