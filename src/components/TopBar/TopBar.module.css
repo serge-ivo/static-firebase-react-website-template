@@ -1,0 +1,10 @@
+.toolbar {
+  /* Adjust the height as needed to make the toolbar narrower */
+  height: 48px; /* Example: reduce height to 48px */
+  max-height: 48px !important;
+  min-height: 48px !important;
+}
+
+.spacer {
+  flex-grow: 1; /* This makes the spacer take up all available space */
+}
