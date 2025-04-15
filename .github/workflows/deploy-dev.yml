@@ -64,7 +64,7 @@ jobs:
           # Ensure you create this secret in GitHub Settings > Secrets > Actions
           # It should contain the JSON service account key for your DEV Firebase project.
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" # Ensure this secret is created in the 'development' environment settings
-          # channelId: dev # Optional: deploy to a specific preview channel
+          channelId: dev # Deploy to preview channel for development
           projectId: "static-website-template-ee8ac" # Set the confirmed DEV project ID.
 
       # Optional: Output deployment URL
