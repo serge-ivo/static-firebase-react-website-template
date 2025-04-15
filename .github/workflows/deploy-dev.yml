@@ -34,6 +34,25 @@ jobs:
           echo "\nChecking for .env file:"
           ls -la .env* || true
 
+      - name: Validate Secrets
+        run: |
+          echo "Checking if secrets are set (will only show length):"
+          echo "VITE_FIREBASE_API_KEY length: ${#VITE_FIREBASE_API_KEY}"
+          echo "VITE_FIREBASE_AUTH_DOMAIN length: ${#VITE_FIREBASE_AUTH_DOMAIN}"
+          echo "VITE_FIREBASE_PROJECT_ID length: ${#VITE_FIREBASE_PROJECT_ID}"
+          echo "VITE_FIREBASE_STORAGE_BUCKET length: ${#VITE_FIREBASE_STORAGE_BUCKET}"
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID length: ${#VITE_FIREBASE_MESSAGING_SENDER_ID}"
+          echo "VITE_FIREBASE_APP_ID length: ${#VITE_FIREBASE_APP_ID}"
+          echo "VITE_FIREBASE_MEASUREMENT_ID length: ${#VITE_FIREBASE_MEASUREMENT_ID}"
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+
       - name: Build Project
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
@@ -46,10 +65,6 @@ jobs:
         run: |
           echo "Environment variables present:"
           env | grep VITE_ || true
-          echo "\nCreating temporary env file for debugging:"
-          env | grep VITE_ > .env.build
-          echo "\nChecking .env.build content:"
-          cat .env.build
           echo "\nBuilding project:"
           npm run build
           echo "\nChecking build output:"
