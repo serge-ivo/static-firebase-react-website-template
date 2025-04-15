@@ -45,9 +45,11 @@ jobs:
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
         run: |
           echo "Environment variables present:"
-          env | grep -i firebase || true
+          env | grep VITE_ || true
           echo "\nCreating temporary env file for debugging:"
           env | grep VITE_ > .env.build
+          echo "\nChecking .env.build content:"
+          cat .env.build
           echo "\nBuilding project:"
           npm run build
           echo "\nChecking build output:"
