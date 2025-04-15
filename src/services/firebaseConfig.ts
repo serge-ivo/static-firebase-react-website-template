@@ -11,23 +11,37 @@ import {
 // Firebase configuration is loaded from environment variables.
 // Create a .env file in the root directory (copy from .env.example)
 // and replace the placeholder values with your actual Firebase project configuration.
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, // Optional
+declare const __FIREBASE_CONFIG__: {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+  measurementId?: string;
 };
+
+const firebaseConfig = __FIREBASE_CONFIG__;
 // ----------------- //
 
+// Debug: Log which environment variables are present (without their values)
+type FirebaseConfigKey = keyof typeof firebaseConfig;
+const configKeys = Object.keys(firebaseConfig) as FirebaseConfigKey[];
+
+console.log('Firebase config keys present:', configKeys.filter(key => firebaseConfig[key]));
+
 // Basic validation to ensure variables are loaded
-if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+const missingVars = Object.entries(firebaseConfig)
+  .filter(([key]) => key !== 'measurementId') // measurementId is optional
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+
+if (missingVars.length > 0) {
   console.error(
-    "Firebase configuration variables (VITE_FIREBASE_...) are missing. Make sure you have a .env file with the correct values."
+    'Missing required Firebase configuration variables:',
+    missingVars.join(', ')
   );
-  // Optionally throw an error or display a message to the user
+  throw new Error('Firebase configuration is incomplete. Check the console for details.');
 }
 
 // Initialize Firebase
