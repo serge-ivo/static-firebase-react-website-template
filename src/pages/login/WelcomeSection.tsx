@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { APP_TITLE } from "../../config";
 
 const WelcomeSection: React.FC = () => {
   return (
@@ -12,13 +13,13 @@ const WelcomeSection: React.FC = () => {
           mb: 2,
         }}
       >
-        JobSearch.Works
+        {APP_TITLE}
       </Typography>
       <Typography
         variant="h6"
         sx={{ color: "white", opacity: 0.8, fontStyle: "italic" }}
       >
-        AI agent for job seekers
+        Your AI-ready starter template
       </Typography>
     </Box>
   );

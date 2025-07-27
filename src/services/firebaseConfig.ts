@@ -8,40 +8,37 @@ import {
 // import { getAnalytics } from "firebase/analytics"; // Optional: uncomment if needed
 
 // --- IMPORTANT --- //
-// Firebase configuration is loaded from environment variables.
-// Create a .env file in the root directory (copy from .env.example)
-// and replace the placeholder values with your actual Firebase project configuration.
+// Firebase configuration
+// ---------------------------------------------------------------------------
+// The template ships with public **production** credentials for the demo app
+// so it works out-of-the-box.  They are safe to expose on the web. 
+// If you want to use your own Firebase project, simply create a `.env` file and
+// set the VITE_FIREBASE_* variables – those will automatically override the
+// defaults below.
+
+const DEFAULT_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCun6g1MT81QF4MuHxNRkRdvjZ8_Lyl4WA",
+  authDomain: "static-web-template.firebaseapp.com",
+  projectId: "static-web-template",
+  storageBucket: "static-web-template.firebasestorage.app",
+  messagingSenderId: "236204961289",
+  appId: "1:236204961289:web:6f046864524c5b308c92d8",
+  measurementId: "G-GT18PZBW8Y",
+};
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || DEFAULT_FIREBASE_CONFIG.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || DEFAULT_FIREBASE_CONFIG.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || DEFAULT_FIREBASE_CONFIG.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || DEFAULT_FIREBASE_CONFIG.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || DEFAULT_FIREBASE_CONFIG.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || DEFAULT_FIREBASE_CONFIG.appId,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || DEFAULT_FIREBASE_CONFIG.measurementId,
 };
 // ----------------- //
 
-// Debug: Log which environment variables are present (without their values)
-type FirebaseConfigKey = keyof typeof firebaseConfig;
-const configKeys = Object.keys(firebaseConfig) as FirebaseConfigKey[];
-
-console.log('Firebase config keys present:', configKeys.filter(key => firebaseConfig[key]));
-
-// Basic validation to ensure variables are loaded
-const missingVars = Object.entries(firebaseConfig)
-  .filter(([key]) => key !== 'measurementId') // measurementId is optional
-  .filter(([, value]) => !value)
-  .map(([key]) => key);
-
-if (missingVars.length > 0) {
-  console.error(
-    'Missing required Firebase configuration variables:',
-    missingVars.join(', ')
-  );
-  throw new Error('Firebase configuration is incomplete. Check the console for details.');
-}
-
+// Optional: Log active Firebase project for quick sanity-check during startup
+console.info(`Firebase project initialised: ${firebaseConfig.projectId}`);
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 

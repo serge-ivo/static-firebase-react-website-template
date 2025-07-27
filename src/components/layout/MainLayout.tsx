@@ -10,6 +10,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopBar from "./TopBar"; // Import the new TopBar component
+import { APP_TITLE } from "../../config";
 
 // Removed inline TopBar component definition
 
@@ -30,7 +31,7 @@ const Footer: React.FC = () => {
       }}
     >
       <Typography variant="body2" color="text.secondary">
-        © {new Date().getFullYear()} My App Template
+        © {new Date().getFullYear()} {APP_TITLE}
       </Typography>
     </Box>
   );

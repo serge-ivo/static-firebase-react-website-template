@@ -96,16 +96,17 @@ jobs:
           name: dist-dev
           path: dist
 
-      - name: Deploy to Firebase Hosting (Development)
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase (Development)
         id: deploy_firebase_dev
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          # Ensure you create this secret in GitHub Settings > Secrets > Actions
-          # It should contain the JSON service account key for your DEV Firebase project.
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" # Ensure this secret is created in the 'development' environment settings
-          channelId: dev # Deploy to preview channel for development
-          projectId: "static-website-template-ee8ac" # Set the confirmed DEV project ID.
+        run: |
+          # Deploy Firestore Rules
+          firebase deploy --only firestore:rules --project static-website-template-ee8ac --token "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
+          
+          # Deploy Hosting
+          firebase hosting:channel:deploy dev --project static-website-template-ee8ac --token "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
 
       # Optional: Output deployment URL
       - name: Deployment URL
